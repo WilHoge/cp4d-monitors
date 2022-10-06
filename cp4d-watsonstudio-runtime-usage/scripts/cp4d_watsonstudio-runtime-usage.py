@@ -88,7 +88,8 @@ def main():
            project_total_memory_usage+=pod_memory_usage
            project_total_cpu_usage+=project_total_cpu_usage
           
-           key_deployment=pod['metadata']['name'][0:-14]
+           key_deployment=pod['metadata']['name']
+           key_deployment=key_deployment[0:+key_deployment.rindex('-')] # strip of last -...
            deployment_resources =deployments[key_deployment].spec.template.spec.containers[0].resources
            events.append({"monitor_type":monitor_type, 
                           "event_type":event_type_watsonstudio_runtime_usage_cpu, 
