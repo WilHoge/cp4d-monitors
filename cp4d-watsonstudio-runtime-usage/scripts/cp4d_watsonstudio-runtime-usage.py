@@ -74,6 +74,9 @@ def main():
            print("\nPods:\n",pod)
            key_deployment=pod['metadata']['name']
            key_deployment=key_deployment[0:+key_deployment.rindex('-')] # strip of last -...
+           if key_deployment.find('rstudio') == 0:
+             key_deployment=key_deployment[0:+key_deployment.rindex('-')] # strip of last -...
+
            deployment_resources =deployments[key_deployment].spec.template.spec.containers[0].resources           
            pod_cpu_usage=convert_cpu_unit(pod['containers'][1]['usage']['cpu'])          
            pod_cpu_limits= convert_cpu_unit(deployment_resources.limits['cpu'])
@@ -89,9 +92,6 @@ def main():
            project_total_memory_usage+=pod_memory_usage
            project_total_cpu_usage+=project_total_cpu_usage
           
-           key_deployment=pod['metadata']['name']
-           key_deployment=key_deployment[0:+key_deployment.rindex('-')] # strip of last -...
-           deployment_resources =deployments[key_deployment].spec.template.spec.containers[0].resources
            events.append({"monitor_type":monitor_type, 
                           "event_type":event_type_watsonstudio_runtime_usage_cpu, 
                           "metadata": metadata_watsonstudio_runtime_usage_cpu.format(pod_cpu_limits,pod_cpu_requests,pod_cpu_usage), 
